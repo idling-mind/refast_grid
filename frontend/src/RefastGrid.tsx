@@ -219,13 +219,39 @@ export function RefastGrid({
         if ('text' in c) normalizedCell.text = c.text;
         if ('value' in c) normalizedCell.value = c.value;
         if ('checked' in c) normalizedCell.checked = c.checked;
-        if ('date' in c) normalizedCell.date = c.date;
         if ('placeholder' in c) normalizedCell.placeholder = c.placeholder;
         if ('format' in c) normalizedCell.format = c.format;
 
+        // Date and Time cells require JavaScript Date objects
+        if ('date' in c) {
+          normalizedCell.date = typeof c.date === 'string' && c.date ? new Date(c.date) : c.date;
+        }
+        if ('time' in c) {
+          normalizedCell.time = typeof c.time === 'string' && c.time ? new Date(c.time) : c.time;
+        }
+
+        // Chevron cell support
+        const isExpanded = c.isExpanded ?? c.is_expanded;
+        if (isExpanded !== undefined) normalizedCell.isExpanded = isExpanded;
+
+        const hasChildren = c.hasChildren ?? c.has_children;
+        if (hasChildren !== undefined) normalizedCell.hasChildren = hasChildren;
+
+        const parentId = c.parentId ?? c.parent_id;
+        if (parentId !== undefined) normalizedCell.parentId = parentId;
+
+        const indent = c.indent;
+        if (indent !== undefined) normalizedCell.indent = indent;
+
         // Copy other fields
         for (const key of Object.keys(c)) {
-          if (!['column_id', 'columnId', 'row_id', 'rowId', 'class_name', 'className', 'non_editable', 'nonEditable', 'style', 'type'].includes(key)) {
+          if (![
+            'column_id', 'columnId', 'row_id', 'rowId', 
+            'class_name', 'className', 'non_editable', 'nonEditable', 
+            'style', 'type', 'isExpanded', 'is_expanded', 
+            'hasChildren', 'has_children', 'parentId', 'parent_id', 
+            'indent', 'date', 'time'
+          ].includes(key)) {
             normalizedCell[key] = c[key];
           }
         }
