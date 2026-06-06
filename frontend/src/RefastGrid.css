@@ -1,0 +1,154 @@
+/* Refast CSS variables defaults mapping to shadcn theme variables */
+:root {
+  --rg-border-color: hsl(var(--border));
+  --rg-foreground: hsl(var(--foreground));
+  --rg-background: hsl(var(--card));
+  --rg-cell-foreground: inherit;
+  
+  --rg-popover-bg: hsl(var(--popover));
+  --rg-popover-fg: hsl(var(--popover-foreground));
+  --rg-primary: hsl(var(--primary));
+  --rg-primary-fg: hsl(var(--primary-foreground));
+  --rg-selection-bg: hsla(var(--primary) / 0.15);
+  
+  --rg-muted-bg: hsl(var(--muted));
+  --rg-accent-bg: hsl(var(--accent));
+  --rg-accent-fg: hsl(var(--accent-foreground));
+  --rg-muted-fg: hsl(var(--muted-foreground));
+  
+  --rg-header-bg: hsl(var(--muted));
+  --rg-header-fg: hsl(var(--foreground));
+}
+
+.refast_grid {
+  border-color: var(--rg-border-color) !important;
+}
+
+.reactgrid-content {
+  color: var(--rg-foreground);
+  background-color: transparent;
+}
+
+/* Pane backgrounds (header, sticky rows, main grid body) */
+.reactgrid-content .rg-pane,
+.reactgrid-content .rg-pane.rg-pane-top,
+.reactgrid-content .rg-pane.rg-pane-bottom,
+.reactgrid-content .rg-pane.rg-pane-left,
+.reactgrid-content .rg-pane.rg-pane-right {
+  background-color: var(--rg-background);
+}
+
+/* Individual cells */
+.reactgrid-content .rg-pane .rg-cell {
+  border-color: var(--rg-border-color) !important;
+  /* Using inherit allows cell-specific Tailwind classes (like text-muted-foreground)
+     to take precedence over the grid's default text color */
+  color: var(--rg-cell-foreground);
+  background-color: transparent;
+}
+
+/* Header Cells (Title Row) */
+.reactgrid-content .rg-pane .rg-cell.rg-header-cell {
+  background-color: var(--rg-header-bg) !important;
+  color: var(--rg-header-fg);
+  font-weight: 600;
+}
+
+/* Cell editor (input box when editing) */
+.rg-celleditor {
+  background-color: var(--rg-popover-bg) !important;
+  border-color: var(--rg-primary) !important;
+  color: var(--rg-popover-fg) !important;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+}
+
+.rg-celleditor-input, 
+.rg-celleditor .rg-input {
+  color: var(--rg-popover-fg) !important;
+  background-color: transparent !important;
+}
+
+/* Checkbox Cells */
+.reactgrid-content .rg-pane .rg-cell.rg-checkbox-cell span {
+  background-color: var(--rg-muted-bg);
+  border: 1px solid var(--rg-border-color) !important;
+  border-radius: 4px;
+}
+
+.reactgrid-content .rg-pane .rg-cell.rg-checkbox-cell label:hover input ~ span {
+  background-color: var(--rg-accent-bg);
+}
+
+.reactgrid-content .rg-pane .rg-cell.rg-checkbox-cell label input:checked ~ span {
+  background-color: var(--rg-primary);
+  border-color: var(--rg-primary) !important;
+}
+
+.reactgrid-content .rg-pane .rg-cell.rg-checkbox-cell label span:after {
+  border-color: var(--rg-primary-fg) !important;
+}
+
+/* Cell Focus / Highlights */
+.reactgrid-content .rg-pane .rg-cell-focus,
+.reactgrid-content .rg-pane .rg-cell-highlight {
+  border-color: var(--rg-primary);
+}
+
+/* Fill Handle */
+.reactgrid-content .rg-pane .rg-touch-fill-handle .rg-fill-handle {
+  background-color: var(--rg-primary);
+  border-color: var(--rg-background);
+}
+
+/* Selected Range */
+.reactgrid-content .rg-pane .rg-partial-area.rg-partial-area-selected-range {
+  border-color: var(--rg-primary);
+  background-color: var(--rg-selection-bg);
+}
+
+/* Dropdown Menu (for dropdown cells) */
+.reactgrid-content .rg-pane .rg-cell.rg-dropdown-cell .rg-dropdown-menu {
+  background-color: var(--rg-popover-bg);
+  border: 1px solid var(--rg-border-color) !important;
+  color: var(--rg-popover-fg);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.reactgrid-content .rg-pane .rg-cell.rg-dropdown-cell .rg-dropdown-option {
+  color: var(--rg-popover-fg);
+}
+
+.reactgrid-content .rg-pane .rg-cell.rg-dropdown-cell .rg-dropdown-option.focused {
+  color: var(--rg-accent-fg) !important;
+  background-color: var(--rg-accent-bg) !important;
+}
+
+/* Context Menu */
+.reactgrid-content .rg-context-menu {
+  background-color: var(--rg-popover-bg);
+  color: var(--rg-popover-fg);
+  border: 1px solid var(--rg-border-color) !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.reactgrid-content .rg-context-menu .rg-context-menu-option:hover {
+  background-color: var(--rg-accent-bg);
+  color: var(--rg-accent-fg);
+}
+
+/* Column / Row Resizing Hints */
+.reactgrid-content .rg-column-resize-hint,
+.reactgrid-content .rg-row-resize-hint,
+.reactgrid-content .rg-line {
+  background-color: var(--rg-primary);
+}
+
+.reactgrid-content .rg-pane .rg-cell .rg-touch-column-resize-handle .rg-resize-handle:hover,
+.reactgrid-content .rg-pane .rg-cell .rg-touch-row-resize-handle .rg-resize-handle:hover {
+  background-color: var(--rg-primary);
+}
+
+/* Placeholder Styling */
+.reactgrid-content .rg-pane .rg-cell.rg-text-cell.placeholder {
+  color: var(--rg-muted-fg);
+}

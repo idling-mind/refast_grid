@@ -18,6 +18,7 @@ import {
   DropPosition
 } from '@silevis/reactgrid';
 import '@silevis/reactgrid/styles.css';
+import './RefastGrid.css';
 import { cn } from './utils';
 
 export interface RefastGridProps {

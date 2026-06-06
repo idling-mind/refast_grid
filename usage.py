@@ -15,12 +15,13 @@ Run this file with:
 
 Then open http://localhost:8085 in your browser.
 """
+from hashlib import new
 
 import asyncio
 import random
 from fastapi import FastAPI
 from refast import RefastApp, Context
-from refast.components import Container, Card, CardHeader, CardTitle, CardContent, Text, Button, Row, Column
+from refast.components import Container, Card, CardHeader, CardTitle, CardContent, Text, Button, Row, Column, ThemeSwitcher, Badge, Tabs, TabItem
 
 from refast_grid import RefastGrid
 
@@ -414,11 +415,13 @@ def init_state(ctx: Context):
 # CALLBACK EVENT HANDLERS
 # =====================================================================
 
-async def switch_tab(ctx: Context, tab: str):
+async def switch_tab(ctx: Context):
+    if not ctx.event_data or not isinstance(ctx.event_data, dict):
+        return
+    new_tab = ctx.event_data.get("value")
     """Switch active view and update tab buttons dynamically."""
     init_state(ctx)
     active_tab = ctx.state.get("active_tab", "spreadsheet")
-    new_tab = tab
     if not new_tab or new_tab == active_tab:
         return
         
@@ -666,21 +669,25 @@ def home(ctx: Context):
                             Column(
                                 class_name="space-y-1",
                                 children=[
-                                    Text(
-                                        "RefastGrid Premium Showcase Hub",
-                                        class_name="text-3xl font-bold tracking-tight bg-gradient-to-r from-primary to-emerald-500 bg-clip-text text-transparent"
+                                    Row(
+                                        [
+                                            Text(
+                                                "RefastGrid Premium Showcase Hub",
+                                                class_name="text-3xl font-bold tracking-tight bg-gradient-to-r from-primary to-emerald-500 bg-clip-text text-transparent"
+                                            ),
+                                            Badge("v0.2.0")
+                                        ],
+                                        align="center",
+                                        gap=3,
                                     ),
                                     Text(
                                         "Explore advanced spreadsheet, tree structure, live streams, and reactive grids built with Refast.",
                                         class_name="text-muted-foreground text-sm"
-                                    )
+                                    ),
                                 ]
                             ),
                             # Small status pill
-                            Text(
-                                "ReactGrid v4.0.0",
-                                class_name="px-2.5 py-1 text-xs font-semibold rounded-full bg-primary/10 text-primary border border-primary/20 font-mono shadow-sm"
-                            )
+                            ThemeSwitcher(),
                         ]
                     )
                 ]
@@ -688,36 +695,17 @@ def home(ctx: Context):
             
             # Tab Controls Row
             Row(
-                class_name="flex flex-wrap gap-2 border-b border-border pb-3 justify-start items-center",
                 children=[
-                    Button(
-                        "Spreadsheet Editor",
-                        id="tab-btn-spreadsheet",
-                        on_click=ctx.callback(switch_tab, tab="spreadsheet"),
-                        variant="default" if active_tab == "spreadsheet" else "ghost",
-                        class_name="text-sm font-medium transition-all"
-                    ),
-                    Button(
-                        "Calculated Invoice",
-                        id="tab-btn-invoice",
-                        on_click=ctx.callback(switch_tab, tab="invoice"),
-                        variant="default" if active_tab == "invoice" else "ghost",
-                        class_name="text-sm font-medium transition-all"
-                    ),
-                    Button(
-                        "Collapsible Tree Grid",
-                        id="tab-btn-tree",
-                        on_click=ctx.callback(switch_tab, tab="tree"),
-                        variant="default" if active_tab == "tree" else "ghost",
-                        class_name="text-sm font-medium transition-all"
-                    ),
-                    Button(
-                        "Live Crypto Ticker",
-                        id="tab-btn-live",
-                        on_click=ctx.callback(switch_tab, tab="live"),
-                        variant="default" if active_tab == "live" else "ghost",
-                        class_name="text-sm font-medium transition-all"
-                    ),
+                    Tabs(
+                        [
+                            TabItem(label="Spreadsheet Editor", value="spreadsheet"),
+                            TabItem(label="Calculated Invoice", value="invoice"),
+                            TabItem(label="Collapsible Tree Grid", value="tree"),
+                            TabItem(label="Live Crypto Ticker", value="live"),
+                        ],
+                        value=active_tab,
+                        on_value_change=ctx.callback(switch_tab)
+                    )
                 ]
             ),
             
