@@ -7,7 +7,7 @@ from refast.components.registry import register_component
 
 @register_component(
     name="RefastGrid",
-    package="refast-refast_grid",
+    package="refast_grid",
     module="components",
 )
 class RefastGrid(Component):

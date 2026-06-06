@@ -1,4 +1,4 @@
-# refast-refast_grid
+# refast_grid
 
 Spreadsheet component for refast
 
@@ -7,7 +7,7 @@ A [Refast](https://github.com/idling-mind/refast) extension that provides the `R
 ## Installation
 
 ```bash
-pip install refast-refast_grid
+pip install refast_grid
 ```
 
 ## Usage

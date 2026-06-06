@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "refast-refast_grid"
+name = "refast_grid"
 version = "0.1.0"
 description = "Spreadsheet component for refast"
 readme = "README.md"
@@ -27,9 +27,9 @@ dependencies = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/idling-mind/refast-refast_grid"
-"Bug Tracker" = "https://github.com/idling-mind/refast-refast_grid/issues"
-"Documentation" = "https://github.com/idling-mind/refast-refast_grid#readme"
+"Homepage" = "https://github.com/idling-mind/refast_grid"
+"Bug Tracker" = "https://github.com/idling-mind/refast_grid/issues"
+"Documentation" = "https://github.com/idling-mind/refast_grid#readme"
 
 # Entry point for auto-discovery by Refast
 [project.entry-points."refast.extensions"]

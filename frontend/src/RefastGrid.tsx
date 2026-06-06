@@ -116,6 +116,30 @@ export function RefastGrid({
 }: RefastGridProps): React.ReactElement {
   const wrapperRef = useRef<HTMLDivElement>(null);
   
+  // Track visibility to handle initially hidden container rendering
+  const [visibleKey, setVisibleKey] = useState(0);
+  const wasVisibleRef = useRef(false);
+
+  useEffect(() => {
+    const element = wrapperRef.current;
+    if (!element) return;
+
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const isVisibleNow = entry.contentRect.width > 0;
+        if (isVisibleNow && !wasVisibleRef.current) {
+          setVisibleKey(prev => prev + 1);
+        }
+        wasVisibleRef.current = isVisibleNow;
+      }
+    });
+
+    observer.observe(element);
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   // Focus location override (used for programmatic changes)
   const [focusOverride, setFocusOverride] = useState<CellLocation | undefined>(
     focusLocation || initialFocusLocation
@@ -162,6 +186,15 @@ export function RefastGrid({
 
   // Handle column resize
   const handleColumnResized = useCallback((columnId: Id, width: number, selectedColIds: Id[]) => {
+    setLocalColumns((prevColumns) => {
+      return prevColumns.map(col => {
+        if (col.columnId === columnId) {
+          return { ...col, width };
+        }
+        return col;
+      });
+    });
+
     if (onColumnResized) {
       onColumnResized({ columnId, width, selectedColIds });
     }
@@ -190,16 +223,55 @@ export function RefastGrid({
     return canReorderColumns;
   }, [canReorderColumns]);
 
-  // Normalize columns to support both snake_case and camelCase
-  const normalizedColumns = React.useMemo(() => {
-    if (!columns) return [];
-    return columns.map(c => ({
+  // Normalize helper for columns to support both snake_case and camelCase
+  const normalizeColumns = useCallback((cols: Column[]): Column[] => {
+    if (!cols) return [];
+    return cols.map(c => ({
       columnId: c.columnId ?? (c as any).column_id,
       width: c.width,
       resizable: c.resizable,
       reorderable: c.reorderable,
     }));
-  }, [columns]);
+  }, []);
+
+  // Local state for column configuration and widths to support resizing
+  const [localColumns, setLocalColumns] = useState<Column[]>(() => normalizeColumns(columns));
+  const prevColumnsPropRef = useRef<Column[]>(normalizeColumns(columns));
+
+  // Sync state when controlled columns prop changes from the server
+  useEffect(() => {
+    const nextNormalized = normalizeColumns(columns);
+    const prevColumns = prevColumnsPropRef.current;
+    
+    setLocalColumns((currentLocal) => {
+      return nextNormalized.map(nextCol => {
+        const prevCol = prevColumns.find(c => c.columnId === nextCol.columnId);
+        const currentLocalCol = currentLocal.find(c => c.columnId === nextCol.columnId);
+        
+        // If the column wasn't in the previous prop list, it's new, so use it as is
+        if (!prevCol) {
+          return nextCol;
+        }
+        
+        // If the server explicitly updated this column's width prop, use the new width
+        if (nextCol.width !== prevCol.width) {
+          return nextCol;
+        }
+        
+        // If we have a local version of this column (which might be resized), preserve it
+        if (currentLocalCol) {
+          return {
+            ...nextCol,
+            width: currentLocalCol.width,
+          };
+        }
+        
+        return nextCol;
+      });
+    });
+    
+    prevColumnsPropRef.current = nextNormalized;
+  }, [columns, normalizeColumns]);
 
   // Normalize rows and cells to support both snake_case and camelCase
   const normalizedRows = React.useMemo(() => {
@@ -281,34 +353,37 @@ export function RefastGrid({
       ref={wrapperRef}
       id={id}
       className={cn(
-        'refast-refast_grid w-full overflow-auto bg-card text-card-foreground border border-border rounded-[var(--radius)]',
+        'refast_grid w-full overflow-auto bg-card text-card-foreground border border-border rounded-[var(--radius)]',
         className
       )}
       data-refast-id={dataRefastId}
       style={style}
     >
-      <ReactGrid
-        columns={normalizedColumns}
-        rows={normalizedRows}
-        enableColumnResizeOnAllHeaders={enableColumnResizeOnAllHeaders}
-        highlights={highlights}
-        stickyTopRows={stickyTopRows}
-        stickyBottomRows={stickyBottomRows}
-        stickyLeftColumns={stickyLeftColumns}
-        stickyRightColumns={stickyRightColumns}
-        enableFillHandle={enableFillHandle}
-        enableRangeSelection={enableRangeSelection}
-        enableRowSelection={enableRowSelection}
-        enableColumnSelection={enableColumnSelection}
-        focusLocation={focusOverride}
-        onFocusLocationChanged={handleFocusLocationChanged}
-        onCellsChanged={handleCellsChanged}
-        onColumnResized={handleColumnResized}
-        onRowsReordered={handleRowsReordered}
-        onColumnsReordered={handleColumnsReordered}
-        canReorderRows={handleCanReorderRows}
-        canReorderColumns={handleCanReorderColumns}
-      />
+      {visibleKey > 0 && (
+        <ReactGrid
+          key={visibleKey}
+          columns={localColumns}
+          rows={normalizedRows}
+          enableColumnResizeOnAllHeaders={enableColumnResizeOnAllHeaders}
+          highlights={highlights}
+          stickyTopRows={stickyTopRows}
+          stickyBottomRows={stickyBottomRows}
+          stickyLeftColumns={stickyLeftColumns}
+          stickyRightColumns={stickyRightColumns}
+          enableFillHandle={enableFillHandle}
+          enableRangeSelection={enableRangeSelection}
+          enableRowSelection={enableRowSelection}
+          enableColumnSelection={enableColumnSelection}
+          focusLocation={focusOverride}
+          onFocusLocationChanged={handleFocusLocationChanged}
+          onCellsChanged={handleCellsChanged}
+          onColumnResized={handleColumnResized}
+          onRowsReordered={handleRowsReordered}
+          onColumnsReordered={handleColumnsReordered}
+          canReorderRows={handleCanReorderRows}
+          canReorderColumns={handleCanReorderColumns}
+        />
+      )}
     </div>
   );
 }

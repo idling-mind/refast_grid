@@ -20,7 +20,7 @@ import asyncio
 import random
 from fastapi import FastAPI
 from refast import RefastApp, Context
-from refast.components import Container, Card, CardHeader, CardTitle, CardContent, Text, Button, Row
+from refast.components import Container, Card, CardHeader, CardTitle, CardContent, Text, Button, Row, Column
 
 from refast_grid import RefastGrid
 
@@ -663,7 +663,7 @@ def home(ctx: Context):
                     CardContent(
                         class_name="p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4",
                         children=[
-                            Container(
+                            Column(
                                 class_name="space-y-1",
                                 children=[
                                     Text(

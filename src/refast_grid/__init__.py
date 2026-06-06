@@ -33,13 +33,13 @@ class RefastGridExtension(Extension):
     For auto-discovery, install the package and it will be automatically loaded.
     """
 
-    name = "refast-refast_grid"
+    name = "refast_grid"
     version = "0.1.0"
     description = "Spreadsheet component for refast"
 
     # Static assets to load (relative to static_path)
-    scripts = ["refast-refast_grid.js"]
-    styles = ["refast-refast_grid.css"]
+    scripts = ["refast_grid.js"]
+    styles = ["refast_grid.css"]
 
     @property
     def static_path(self) -> Path:

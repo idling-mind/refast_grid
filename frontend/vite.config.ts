@@ -10,7 +10,7 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.tsx'),
       name: 'RefastRefastGrid',
-      fileName: () => 'refast-refast_grid.js',  // Force .js extension
+      fileName: () => 'refast_grid.js',  // Force .js extension
       formats: ['umd'],
     },
     rollupOptions: {
@@ -25,9 +25,9 @@ export default defineConfig({
         // Ensure proper UMD output
         name: 'RefastRefastGrid',
         // Ensure CSS is extracted (if you add styles)
-        assetFileNames: 'refast-refast_grid[extname]',
+        assetFileNames: 'refast_grid[extname]',
         // Force .js extension (not .cjs)
-        entryFileNames: 'refast-refast_grid.js',
+        entryFileNames: 'refast_grid.js',
       },
     },
   },

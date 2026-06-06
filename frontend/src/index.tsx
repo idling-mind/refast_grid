@@ -1,5 +1,5 @@
 /**
- * Refast RefastGrid Extension
+ * RefastGrid Extension
  *
  * This extension provides the RefastGrid component.
  *
@@ -35,7 +35,7 @@ declare global {
 function registerComponents(): void {
   if (!window.RefastClient) {
     console.error(
-      '[refast-refast_grid] RefastClient not found. ' +
+      '[refast_grid] RefastClient not found. ' +
       'Make sure refast-client.js is loaded before this script.'
     );
     return;
@@ -45,13 +45,13 @@ function registerComponents(): void {
 
   // Check if already registered (avoid duplicate registration)
   if (componentRegistry.has('RefastGrid')) {
-    console.warn('[refast-refast_grid] RefastGrid already registered, skipping.');
+    console.warn('[refast_grid] RefastGrid already registered, skipping.');
     return;
   }
 
   // Register the component
   componentRegistry.register('RefastGrid', RefastGrid as React.ComponentType<unknown>);
-  console.log('[refast-refast_grid] Registered RefastGrid component');
+  console.log('[refast_grid] Registered RefastGrid component');
 }
 
 // Register components immediately
