@@ -47,6 +47,11 @@
   background-color: transparent;
 }
 
+/* Set standard horizontal padding for all non-full-bleed cells */
+.reactgrid-content .rg-pane .rg-cell:not(.rg-checkbox-cell):not(.rg-dropdown-cell) {
+  padding: 0 12px;
+}
+
 /* Header Cells (Title Row) */
 .reactgrid-content .rg-pane .rg-cell.rg-header-cell {
   background-color: var(--rg-header-bg) !important;
@@ -152,3 +157,68 @@
 .reactgrid-content .rg-pane .rg-cell.rg-text-cell.placeholder {
   color: var(--rg-muted-fg);
 }
+
+/* Badge Cell Styles */
+.rg-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.675rem;
+  font-weight: 600;
+  line-height: 1;
+  border: 1px solid transparent;
+  text-transform: capitalize;
+}
+
+.rg-badge-primary {
+  background-color: hsla(var(--primary) / 0.15);
+  color: hsl(var(--primary));
+  border-color: hsla(var(--primary) / 0.3);
+}
+
+.rg-badge-secondary {
+  background-color: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+  border-color: hsl(var(--border));
+}
+
+.rg-badge-success {
+  background-color: hsla(142, 76%, 36%, 0.15);
+  color: hsl(142, 76%, 30%);
+  border-color: hsla(142, 76%, 36%, 0.3);
+}
+.dark .rg-badge-success {
+  background-color: hsla(142, 72%, 45%, 0.15);
+  color: hsl(142, 72%, 45%);
+  border-color: hsla(142, 72%, 45%, 0.3);
+}
+
+.rg-badge-warning {
+  background-color: hsla(38, 92%, 50%, 0.15);
+  color: hsl(38, 92%, 30%);
+  border-color: hsla(38, 92%, 50%, 0.3);
+}
+.dark .rg-badge-warning {
+  background-color: hsla(48, 96%, 53%, 0.15);
+  color: hsl(48, 96%, 53%);
+  border-color: hsla(48, 96%, 53%, 0.3);
+}
+
+.rg-badge-destructive {
+  background-color: hsla(var(--destructive) / 0.15);
+  color: hsl(var(--destructive));
+  border-color: hsla(var(--destructive) / 0.3);
+}
+
+.rg-badge-info {
+  background-color: hsla(199, 89%, 48%, 0.15);
+  color: hsl(199, 89%, 30%);
+  border-color: hsla(199, 89%, 48%, 0.3);
+}
+.dark .rg-badge-info {
+  background-color: hsla(199, 89%, 48%, 0.2);
+  color: hsl(199, 89%, 48%);
+  border-color: hsla(199, 89%, 48%, 0.3);
+}
+

@@ -15,9 +15,32 @@ class RefastGrid(Component):
     RefastGrid component.
 
     A powerful grid/spreadsheet component for Refast based on silevis/reactgrid.
-    It supports multiple cell types (text, number, checkbox, date, email, header),
+    It supports multiple cell types:
+    - Default built-in types:
+        - "header": Static column headers.
+        - "text": Simple text.
+        - "number": Numeric value.
+        - "checkbox": Boolean checkbox.
+        - "date": Date selector.
+        - "time": Time selector.
+        - "email": Email-validated field.
+        - "chevron": Collapsible tree indent cell.
+    - Custom premium types:
+        - "badge": Styled status tags with 'text' and 'variant' ("primary", "secondary", "success", "warning", "destructive", "info").
+        - "dropdown": Option dropdowns with 'value' and 'options' list of dicts with 'value' and 'label'.
+        - "button": Interactive click buttons with 'text', 'action_id', and 'variant' ("primary", "secondary", "destructive", "outline"). Triggers cell change callback on click.
+        - "progress": Completion gauges with numeric 'value' (0.0 to 1.0).
+        - "avatar": Profile cards with 'name', 'avatar_url', and optional 'subtext'.
+        - "sparkline": Inline SVG micro-charts with 'values' (number list) and 'chart_type' ("line" or "bar").
+        - "rating": Selectable rating scales with 'value', 'max' (default 5), and 'icon' ("star", "dot", "heart").
+        - "link": styled navigation anchor links with 'text', 'url', and optional 'new_tab' (boolean).
+        - "tags": Inline list of multiple string labels with 'values' (string list).
+        - "color": Color swathes with hex/rgb 'value'. Opens picker when clicked.
+        - "slider": range sliders with 'value', 'min', 'max', and 'step'. Shows tooltip when dragging.
+
     column resizing, sticky rows/columns, cell selection, drag-and-drop reordering,
     and server-side callbacks.
+
 
     Args:
         columns: List of column definitions. Each column is a dict:

@@ -64,6 +64,32 @@ class TestRefastGrid(unittest.TestCase):
         self.assertTrue(result["props"]["enable_fill_handle"])
         self.assertEqual(result["props"]["sticky_top_rows"], 2)
 
+    def test_render_custom_cells(self):
+        columns = [{"column_id": "col1"}]
+        rows = [
+            {
+                "row_id": "row1",
+                "cells": [
+                    {"type": "badge", "text": "Completed", "variant": "success"},
+                    {"type": "dropdown", "value": "todo", "options": [{"value": "todo", "label": "To Do"}]},
+                    {"type": "button", "text": "Click Me", "action_id": "btn_1", "variant": "outline"},
+                    {"type": "progress", "value": 0.5},
+                    {"type": "avatar", "name": "Alice", "avatar_url": "url", "subtext": "Developer"},
+                    {"type": "sparkline", "values": [1, 2, 3], "chart_type": "line"},
+                    {"type": "rating", "value": 4, "max": 5, "icon": "heart"},
+                    {"type": "link", "text": "Google", "url": "https://google.com", "new_tab": True},
+                    {"type": "tags", "values": ["a", "b"]},
+                    {"type": "color", "value": "#ffffff"},
+                    {"type": "slider", "value": 50, "min": 0, "max": 100, "step": 5}
+                ]
+            }
+        ]
+        grid = RefastGrid(id="grid-custom", columns=columns, rows=rows)
+        result = grid.render()
+        
+        self.assertEqual(result["props"]["rows"], rows)
+
 
 if __name__ == "__main__":
     unittest.main()
+

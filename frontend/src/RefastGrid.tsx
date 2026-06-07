@@ -20,6 +20,17 @@ import {
 import '@silevis/reactgrid/styles.css';
 import './RefastGrid.css';
 import { cn } from './utils';
+import { BadgeCellTemplate } from './cells/BadgeCellTemplate';
+import { DropdownCellTemplate } from './cells/DropdownCellTemplate';
+import { ButtonCellTemplate } from './cells/ButtonCellTemplate';
+import { ProgressCellTemplate } from './cells/ProgressCellTemplate';
+import { AvatarCellTemplate } from './cells/AvatarCellTemplate';
+import { SparklineCellTemplate } from './cells/SparklineCellTemplate';
+import { RatingCellTemplate } from './cells/RatingCellTemplate';
+import { LinkCellTemplate } from './cells/LinkCellTemplate';
+import { TagsCellTemplate } from './cells/TagsCellTemplate';
+import { ColorCellTemplate } from './cells/ColorCellTemplate';
+import { SliderCellTemplate } from './cells/SliderCellTemplate';
 
 export interface RefastGridProps {
   /** Component ID - used for targeting with ctx.bound_js() */
@@ -316,6 +327,22 @@ export function RefastGrid({
         const indent = c.indent;
         if (indent !== undefined) normalizedCell.indent = indent;
 
+        // Custom cells mapping
+        const actionId = c.actionId ?? c.action_id;
+        if (actionId !== undefined) normalizedCell.actionId = actionId;
+
+        const clicked = c.clicked;
+        if (clicked !== undefined) normalizedCell.clicked = clicked;
+
+        const avatarUrl = c.avatarUrl ?? c.avatar_url;
+        if (avatarUrl !== undefined) normalizedCell.avatarUrl = avatarUrl;
+
+        const chartType = c.chartType ?? c.chart_type;
+        if (chartType !== undefined) normalizedCell.chartType = chartType;
+
+        const newTab = c.newTab ?? c.new_tab;
+        if (newTab !== undefined) normalizedCell.newTab = newTab;
+
         // Copy other fields
         for (const key of Object.keys(c)) {
           if (![
@@ -323,7 +350,9 @@ export function RefastGrid({
             'class_name', 'className', 'non_editable', 'nonEditable', 
             'style', 'type', 'isExpanded', 'is_expanded', 
             'hasChildren', 'has_children', 'parentId', 'parent_id', 
-            'indent', 'date', 'time'
+            'indent', 'date', 'time',
+            'action_id', 'actionId', 'avatar_url', 'avatarUrl',
+            'chart_type', 'chartType', 'new_tab', 'newTab'
           ].includes(key)) {
             normalizedCell[key] = c[key];
           }
@@ -365,6 +394,19 @@ export function RefastGrid({
           key={visibleKey}
           columns={localColumns}
           rows={normalizedRows}
+          customCellTemplates={{
+            badge: new BadgeCellTemplate(),
+            dropdown: new DropdownCellTemplate(),
+            button: new ButtonCellTemplate(),
+            progress: new ProgressCellTemplate(),
+            avatar: new AvatarCellTemplate(),
+            sparkline: new SparklineCellTemplate(),
+            rating: new RatingCellTemplate(),
+            link: new LinkCellTemplate(),
+            tags: new TagsCellTemplate(),
+            color: new ColorCellTemplate(),
+            slider: new SliderCellTemplate(),
+          }}
           enableColumnResizeOnAllHeaders={enableColumnResizeOnAllHeaders}
           highlights={highlights}
           stickyTopRows={stickyTopRows}
